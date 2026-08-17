@@ -1,20 +1,162 @@
-body {
-    font-family: Arial, sans-serif;
-    background: #f5f0e6;
-    text-align: center;
-    padding: 40px;
+/* ===============================
+   CONFIGURAÇÕES GERAIS
+================================ */
+
+* {
+    box-sizing: border-box;
 }
+
+body {
+    margin: 0;
+    min-height: 100vh;
+
+    font-family: Arial, sans-serif;
+
+    background-color: #f5f0e6;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    color: #3b3028;
+}
+
+
+/* ===============================
+   CONTAINER PRINCIPAL
+================================ */
 
 main {
+    width: 90%;
     max-width: 500px;
-    margin: auto;
+
+    text-align: center;
 }
 
-button {
-    display: block;
-    width: 100%;
-    padding: 15px;
-    margin: 10px 0;
+
+/* ===============================
+   TÍTULOS
+================================ */
+
+h1 {
+    font-size: 32px;
+    margin-bottom: 10px;
+}
+
+p {
     font-size: 18px;
+}
+
+
+/* ===============================
+   BOTÕES
+================================ */
+
+button {
+    width: 100%;
+
+    padding: 16px;
+
+    margin: 8px 0;
+
+    border: 3px solid #3b3028;
+    border-radius: 10px;
+
+    background-color: #ffffff;
+
+    font-size: 18px;
+    font-weight: bold;
+
+    color: #3b3028;
+
     cursor: pointer;
+
+    transition: 0.15s;
+}
+
+button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 0 #3b3028;
+}
+
+button:active {
+    transform: translateY(2px);
+    box-shadow: none;
+}
+
+
+/* ===============================
+   ESCONDER TELAS
+================================ */
+
+.escondido {
+    display: none;
+}
+
+
+/* ===============================
+   BOTÃO VOLTAR
+================================ */
+
+.voltar {
+    width: auto;
+
+    padding: 8px 15px;
+
+    font-size: 14px;
+
+    margin-bottom: 20px;
+}
+
+
+/* ===============================
+   USUÁRIOS
+================================ */
+
+.usuario {
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 15px;
+}
+
+.emoji {
+    font-size: 30px;
+}
+
+
+/* ===============================
+   PERSONAGEM
+================================ */
+
+#personagem {
+    font-size: 100px;
+
+    margin: 20px 0;
+}
+
+
+/* ===============================
+   BOTÃO USAR
+================================ */
+
+.botao-usar {
+    background-color: #d9f2d9;
+}
+
+
+/* ===============================
+   TELA EM USO
+================================ */
+
+#cafe-grande {
+    font-size: 100px;
+
+    margin-bottom: 20px;
+}
+
+.botao-finalizar {
+    background-color: #d9f2d9;
 }
