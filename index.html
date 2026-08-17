@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,20 +14,106 @@
 
     <main>
 
-        <h1>☕ Cafeteira Tamandutech</h1>
+        <!-- TELA 1: CATEGORIAS -->
+        <section id="tela-categorias">
 
-        <p>Quem vai usar a cafeteira?</p>
+            <h1>☕ Cafeteira Tamandutech</h1>
 
-        <button>Administrativo</button>
-        <button>Combate</button>
-        <button>Hockey</button>
-        <button>Sumô</button>
-        <button>Lego</button>
-        <button>Segue-Linha</button>
+            <p>Quem vai usar a cafeteira?</p>
+
+            <div id="categorias">
+
+                <button onclick="selecionarCategoria('Administrativo')">
+                    Administrativo
+                </button>
+
+                <button onclick="selecionarCategoria('Combate')">
+                    Combate
+                </button>
+
+                <button onclick="selecionarCategoria('Hockey')">
+                    Hockey
+                </button>
+
+                <button onclick="selecionarCategoria('Sumô')">
+                    Sumô
+                </button>
+
+                <button onclick="selecionarCategoria('Sumô LEGO')">
+                    Lego
+                </button>
+
+                <button onclick="selecionarCategoria('Seguidor de Linha')">
+                    Segue-Linha
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <!-- TELA 2: USUÁRIOS -->
+        <section id="tela-usuarios" class="escondido">
+
+            <button class="voltar" onclick="voltarCategorias()">
+                ← Voltar
+            </button>
+
+            <h1 id="titulo-categoria"></h1>
+
+            <p>Quem é você?</p>
+
+            <div id="usuarios"></div>
+
+        </section>
+
+
+        <!-- TELA 3: USUÁRIO -->
+        <section id="tela-usuario" class="escondido">
+
+            <button class="voltar" onclick="voltarUsuarios()">
+                ← Voltar
+            </button>
+
+            <div id="personagem">
+                👩
+            </div>
+
+            <h1 id="nome-usuario"></h1>
+
+            <p id="categoria-usuario"></p>
+
+            <button class="botao-usar" onclick="comecarUso()">
+                ☕ Vou usar a cafeteira
+            </button>
+
+        </section>
+
+
+        <!-- TELA 4: CAFETEIRA EM USO -->
+        <section id="tela-em-uso" class="escondido">
+
+            <div id="cafe-grande">
+                ☕
+            </div>
+
+            <h1>Cafeteira em uso!</h1>
+
+            <p id="mensagem-uso"></p>
+
+            <p id="horario-uso"></p>
+
+            <button class="botao-finalizar" onclick="finalizarUso()">
+                ✅ Já usei e limpei!
+            </button>
+
+        </section>
+
 
     </main>
 
     <script src="script.js"></script>
 
 </body>
+
 </html>
