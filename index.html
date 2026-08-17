@@ -4,116 +4,133 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+    <meta name="theme-color" content="#2f6b4f">
     <title>Cafeteira Tamandutech</title>
-
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
-
-    <main>
-
-        <!-- TELA 1: CATEGORIAS -->
-        <section id="tela-categorias">
-
-            <h1>☕ Cafeteira Tamandutech</h1>
-
-            <p>Quem vai usar a cafeteira?</p>
-
-            <div id="categorias">
-
-                <button onclick="selecionarCategoria('Administrativo')">
-                    Administrativo
-                </button>
-
-                <button onclick="selecionarCategoria('Combate')">
-                    Combate
-                </button>
-
-                <button onclick="selecionarCategoria('Hockey')">
-                    Hockey
-                </button>
-
-                <button onclick="selecionarCategoria('Sumô')">
-                    Sumô
-                </button>
-
-                <button onclick="selecionarCategoria('Sumô LEGO')">
-                    Lego
-                </button>
-
-                <button onclick="selecionarCategoria('Seguidor de Linha')">
-                    Segue-Linha
-                </button>
-
+    <main class="painel">
+        <header class="cabecalho-principal">
+            <span class="icone-cafe" aria-hidden="true">☕</span>
+            <div>
+                <p class="marca">Tamandutech</p>
+                <h1>Cafeteira</h1>
             </div>
+        </header>
 
+        <section id="tela-inicio" class="tela">
+            <div class="titulo-tela">
+                <p class="etiqueta">Bem-vindo!</p>
+                <h2>Quem vai usar a cafeteira?</h2>
+                <p>Escolha seu personagem ou crie um novo perfil.</p>
+            </div>
+            <div id="lista-perfis" class="grade-perfis" aria-live="polite"></div>
+            <button id="botao-criar-perfil" class="botao botao-destaque" type="button">
+                ＋ Criar meu personagem
+            </button>
         </section>
 
-
-        <!-- TELA 2: USUÁRIOS -->
-        <section id="tela-usuarios" class="escondido">
-
-            <button class="voltar" onclick="voltarCategorias()">
-                ← Voltar
-            </button>
-
-            <h1 id="titulo-categoria"></h1>
-
-            <p>Quem é você?</p>
-
-            <div id="usuarios"></div>
-
-        </section>
-
-
-        <!-- TELA 3: USUÁRIO -->
-        <section id="tela-usuario" class="escondido">
-
-            <button class="voltar" onclick="voltarUsuarios()">
-                ← Voltar
-            </button>
-
-            <div id="personagem">
-                👩
+        <section id="tela-criador" class="tela escondido">
+            <button id="botao-sair-criador" class="botao-voltar" type="button">← Voltar aos perfis</button>
+            <div class="titulo-tela">
+                <p class="etiqueta">Novo personagem</p>
+                <h2>Crie seu perfil</h2>
             </div>
 
-            <h1 id="nome-usuario"></h1>
-
-            <p id="categoria-usuario"></p>
-
-            <button class="botao-usar" onclick="comecarUso()">
-                ☕ Vou usar a cafeteira
-            </button>
-
-        </section>
-
-
-        <!-- TELA 4: CAFETEIRA EM USO -->
-        <section id="tela-em-uso" class="escondido">
-
-            <div id="cafe-grande">
-                ☕
+            <div class="progresso" aria-label="Progresso da criação do personagem">
+                <span id="texto-progresso">Etapa 1 de 3</span>
+                <div class="trilha-progresso" aria-hidden="true">
+                    <span class="passo ativo" data-passo="1"></span>
+                    <span class="passo" data-passo="2"></span>
+                    <span class="passo" data-passo="3"></span>
+                </div>
             </div>
 
-            <h1>Cafeteira em uso!</h1>
+            <form id="formulario-personagem" novalidate>
+                <div class="etapa-criador" data-etapa="1">
+                    <h3>Como devemos chamar você?</h3>
+                    <label class="campo-label" for="nome-personagem">Nome ou apelido</label>
+                    <input id="nome-personagem" name="nome" type="text" maxlength="24"
+                        placeholder="Ex.: Rafaela" autocomplete="name">
+                    <p class="ajuda">Este nome aparecerá durante o uso da cafeteira.</p>
+                </div>
 
-            <p id="mensagem-uso"></p>
+                <div class="etapa-criador escondido" data-etapa="2">
+                    <h3>De quais equipes você participa?</h3>
+                    <label class="opcao-administrativo">
+                        <input id="participa-administrativo" type="checkbox">
+                        <span>
+                            <strong>Administrativo</strong>
+                            <small>Pode ser combinado com uma categoria técnica.</small>
+                        </span>
+                    </label>
+                    <fieldset class="grupo-tecnico">
+                        <legend>Categoria técnica</legend>
+                        <p class="ajuda">Escolha no máximo uma opção.</p>
+                        <div id="opcoes-tecnicas" class="grade-opcoes"></div>
+                    </fieldset>
+                </div>
 
+                <div class="etapa-criador escondido" data-etapa="3">
+                    <h3>Monte seu personagem</h3>
+                    <div id="preview-avatar" class="preview-avatar"></div>
+
+                    <fieldset>
+                        <legend>Tom de pele</legend>
+                        <div id="opcoes-pele" class="opcoes-cor"></div>
+                    </fieldset>
+                    <fieldset>
+                        <legend>Cabelo</legend>
+                        <div id="opcoes-cabelo" class="grade-opcoes compacta"></div>
+                    </fieldset>
+                    <fieldset>
+                        <legend>Cor do cabelo</legend>
+                        <div id="opcoes-cor-cabelo" class="opcoes-cor"></div>
+                    </fieldset>
+                    <fieldset>
+                        <legend>Roupa</legend>
+                        <div id="opcoes-roupa" class="opcoes-cor"></div>
+                    </fieldset>
+                    <div id="resumo-personagem" class="resumo-personagem"></div>
+                </div>
+
+                <p id="erro-formulario" class="mensagem-erro escondido" role="alert"></p>
+                <div class="acoes-formulario">
+                    <button id="botao-etapa-anterior" class="botao botao-secundario escondido" type="button">Anterior</button>
+                    <button id="botao-proxima-etapa" class="botao botao-destaque" type="button">Próxima</button>
+                    <button id="botao-salvar-personagem" class="botao botao-destaque escondido" type="submit">Salvar personagem</button>
+                </div>
+            </form>
+        </section>
+
+        <section id="tela-perfil" class="tela escondido">
+            <button id="botao-voltar-perfis" class="botao-voltar" type="button">← Voltar aos perfis</button>
+            <div id="avatar-perfil" class="preview-avatar"></div>
+            <h2 id="nome-perfil"></h2>
+            <div id="categorias-perfil" class="lista-etiquetas"></div>
+            <button id="botao-comecar-uso" class="botao botao-destaque" type="button">☕ Vou usar a cafeteira</button>
+        </section>
+
+        <section id="tela-em-uso" class="tela escondido">
+            <div class="cafe-grande" aria-hidden="true">☕</div>
+            <p class="etiqueta">Status atual</p>
+            <h2>Cafeteira em uso!</h2>
+            <p id="mensagem-uso" class="mensagem-status"></p>
             <p id="horario-uso"></p>
-
-            <button class="botao-finalizar" onclick="finalizarUso()">
-                ✅ Já usei e limpei!
-            </button>
-
+            <button id="botao-finalizar-uso" class="botao botao-confirmar" type="button">✓ Já usei e limpei!</button>
         </section>
 
-
+        <section id="tela-conclusao" class="tela escondido">
+            <div class="celebracao" aria-hidden="true">✨☕✨</div>
+            <p class="etiqueta">Tudo pronto</p>
+            <h2 id="titulo-conclusao"></h2>
+            <p>Uso finalizado e limpeza confirmada.</p>
+            <button id="botao-voltar-inicio" class="botao botao-destaque" type="button">Voltar ao início</button>
+        </section>
     </main>
 
     <script src="script.js"></script>
-
 </body>
 
 </html>
