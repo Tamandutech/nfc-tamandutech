@@ -1,19 +1,24 @@
 const CHAVE_PERFIS = "cafeteiraTamandutechPerfis";
 
-const CATEGORIAS_TECNICAS = [
-    "Combate",
-    "Hockey",
-    "Sumô",
-    "Sumô LEGO",
-    "Seguidor de Linha"
+const CATEGORIAS = [
+    { nome: "Administrativo", icone: "📋", descricao: "Gestão e organização da equipe" },
+    { nome: "Combate", icone: "⚙️", descricao: "Robôs de combate" },
+    { nome: "Hockey", icone: "🏒", descricao: "Robôs jogadores de hockey" },
+    { nome: "Sumô", icone: "🥋", descricao: "Robôs de sumô" },
+    { nome: "Sumô LEGO", icone: "🧱", descricao: "Sumô construído com LEGO" },
+    { nome: "Seguidor de Linha", icone: "〰️", descricao: "Robôs seguidores de linha" }
 ];
+
+const CATEGORIAS_TECNICAS = CATEGORIAS
+    .filter(categoria => categoria.nome !== "Administrativo")
+    .map(categoria => categoria.nome);
 
 const OPCOES_AVATAR = {
     peles: [
-        { id: "pele-1", nome: "Pele 1", cor: "#f3c9a7" },
-        { id: "pele-2", nome: "Pele 2", cor: "#d89a72" },
-        { id: "pele-3", nome: "Pele 3", cor: "#a96646" },
-        { id: "pele-4", nome: "Pele 4", cor: "#70402f" }
+        { id: "pele-1", nome: "Pele 1", cor: "#f3c9a7", sombra: "#d99d7d", brilho: "#ffd9bc", bochecha: "#e89083" },
+        { id: "pele-2", nome: "Pele 2", cor: "#d89a72", sombra: "#b96f50", brilho: "#eeb58d", bochecha: "#c76f69" },
+        { id: "pele-3", nome: "Pele 3", cor: "#a96646", sombra: "#82452f", brilho: "#c9825d", bochecha: "#a9514e" },
+        { id: "pele-4", nome: "Pele 4", cor: "#70402f", sombra: "#4d2a24", brilho: "#92553d", bochecha: "#7f3c3c" }
     ],
     cabelos: [
         { id: "curto", nome: "Curto" },
@@ -22,16 +27,16 @@ const OPCOES_AVATAR = {
         { id: "raspado", nome: "Raspado" }
     ],
     coresCabelo: [
-        { id: "castanho", nome: "Castanho", cor: "#5b392b" },
-        { id: "preto", nome: "Preto", cor: "#27242b" },
-        { id: "loiro", nome: "Loiro", cor: "#d4a94f" },
-        { id: "ruivo", nome: "Ruivo", cor: "#a84f31" }
+        { id: "castanho", nome: "Castanho", cor: "#5b392b", sombra: "#35251f", brilho: "#81543b" },
+        { id: "preto", nome: "Preto", cor: "#27242b", sombra: "#17161c", brilho: "#4b4551" },
+        { id: "loiro", nome: "Loiro", cor: "#d4a94f", sombra: "#9a7435", brilho: "#f0ca6d" },
+        { id: "ruivo", nome: "Ruivo", cor: "#a84f31", sombra: "#713323", brilho: "#d06b3f" }
     ],
     roupas: [
-        { id: "verde", nome: "Verde", cor: "#4d8b62" },
-        { id: "azul", nome: "Azul", cor: "#477ca6" },
-        { id: "vermelha", nome: "Vermelha", cor: "#a8463b" },
-        { id: "amarela", nome: "Amarela", cor: "#d5a93f" }
+        { id: "verde", nome: "Verde", cor: "#4d8b62", sombra: "#2f6548", brilho: "#76af7e" },
+        { id: "azul", nome: "Azul", cor: "#477ca6", sombra: "#315476", brilho: "#6ba6c9" },
+        { id: "vermelha", nome: "Vermelha", cor: "#a8463b", sombra: "#722f2c", brilho: "#d06452" },
+        { id: "amarela", nome: "Amarela", cor: "#d5a93f", sombra: "#95712f", brilho: "#efca60" }
     ]
 };
 
@@ -48,6 +53,7 @@ const PERFIS_INICIAIS = [
 
 let perfis = carregarPerfis();
 let perfilSelecionado = null;
+let categoriaAberta = null;
 let inicioUso = null;
 let etapaAtual = 1;
 let rascunho = criarRascunho();
@@ -130,12 +136,46 @@ function criarAvatar(perfil, tamanho = "normal") {
     container.setAttribute("aria-label", `Personagem de ${perfil.nome || "novo perfil"}`);
 
     const personagem = document.createElement("div");
-    personagem.className = `avatar-pixel cabelo-${avatar.cabelo}`;
+    personagem.className = `avatar-sprite cabelo-${avatar.cabelo}`;
     personagem.style.setProperty("--pele", pele.cor);
+    personagem.style.setProperty("--pele-sombra", pele.sombra);
+    personagem.style.setProperty("--pele-brilho", pele.brilho);
+    personagem.style.setProperty("--bochecha", pele.bochecha);
     personagem.style.setProperty("--cabelo", corCabelo.cor);
+    personagem.style.setProperty("--cabelo-sombra", corCabelo.sombra);
+    personagem.style.setProperty("--cabelo-brilho", corCabelo.brilho);
     personagem.style.setProperty("--roupa", roupa.cor);
+    personagem.style.setProperty("--roupa-sombra", roupa.sombra);
+    personagem.style.setProperty("--roupa-brilho", roupa.brilho);
 
-    ["cabelo-pixel", "rosto-pixel", "olho-pixel olho-esquerdo", "olho-pixel olho-direito", "corpo-pixel"]
+    [
+        "sombra-sprite",
+        "cabelo-fundo-sprite",
+        "perna-sprite perna-esquerda",
+        "perna-sprite perna-direita",
+        "sapato-sprite sapato-esquerdo",
+        "sapato-sprite sapato-direito",
+        "braco-sprite braco-esquerdo",
+        "braco-sprite braco-direito",
+        "corpo-sprite",
+        "gola-sprite gola-esquerda",
+        "gola-sprite gola-direita",
+        "emblema-sprite",
+        "pescoco-sprite",
+        "orelha-sprite orelha-esquerda",
+        "orelha-sprite orelha-direita",
+        "rosto-sprite",
+        "cabelo-topo-sprite",
+        "franja-sprite",
+        "sobrancelha-sprite sobrancelha-esquerda",
+        "sobrancelha-sprite sobrancelha-direita",
+        "olho-sprite olho-esquerdo",
+        "olho-sprite olho-direito",
+        "nariz-sprite",
+        "bochecha-sprite bochecha-esquerda",
+        "bochecha-sprite bochecha-direita",
+        "boca-sprite"
+    ]
         .forEach(classes => {
             const parte = document.createElement("span");
             parte.className = classes;
@@ -146,11 +186,76 @@ function criarAvatar(perfil, tamanho = "normal") {
     return container;
 }
 
+function perfilPertenceCategoria(perfil, categoria) {
+    if (categoria === "Administrativo") return perfil.administrativo;
+    return perfil.categoriaTecnica === categoria;
+}
+
+function renderizarCategorias() {
+    const lista = document.getElementById("lista-categorias");
+    lista.replaceChildren();
+
+    CATEGORIAS.forEach(categoria => {
+        const quantidade = perfis.filter(perfil => perfilPertenceCategoria(perfil, categoria.nome)).length;
+        const botao = document.createElement("button");
+        botao.type = "button";
+        botao.className = "categoria-card";
+
+        const icone = document.createElement("span");
+        icone.className = "categoria-card-icone";
+        icone.textContent = categoria.icone;
+        botao.appendChild(icone);
+
+        const textos = document.createElement("span");
+        textos.className = "categoria-card-textos";
+        const nome = document.createElement("strong");
+        nome.textContent = categoria.nome;
+        const descricao = document.createElement("small");
+        descricao.textContent = categoria.descricao;
+        textos.appendChild(nome);
+        textos.appendChild(descricao);
+        botao.appendChild(textos);
+
+        const contador = document.createElement("span");
+        contador.className = "categoria-contador";
+        contador.textContent = `${quantidade}`;
+        contador.setAttribute("aria-label", `${quantidade} personagens`);
+        botao.appendChild(contador);
+
+        botao.addEventListener("click", () => abrirCategoria(categoria.nome));
+        lista.appendChild(botao);
+    });
+}
+
+function abrirCategoria(nomeCategoria) {
+    categoriaAberta = nomeCategoria;
+    const categoria = CATEGORIAS.find(item => item.nome === nomeCategoria);
+    document.getElementById("icone-categoria").textContent = categoria.icone;
+    document.getElementById("titulo-categoria").textContent = categoria.nome;
+    document.getElementById("visao-categorias").classList.add("escondido");
+    document.getElementById("visao-perfis-categoria").classList.remove("escondido");
+    renderizarPerfis();
+}
+
+function voltarParaCategorias() {
+    categoriaAberta = null;
+    document.getElementById("visao-perfis-categoria").classList.add("escondido");
+    document.getElementById("visao-categorias").classList.remove("escondido");
+    renderizarCategorias();
+}
+
 function renderizarPerfis() {
     const lista = document.getElementById("lista-perfis");
     lista.replaceChildren();
 
-    perfis.forEach(perfil => {
+    const perfisDaCategoria = categoriaAberta
+        ? perfis.filter(perfil => perfilPertenceCategoria(perfil, categoriaAberta))
+        : [];
+
+    document.getElementById("mensagem-sem-perfis")
+        .classList.toggle("escondido", perfisDaCategoria.length > 0);
+
+    perfisDaCategoria.forEach(perfil => {
         const botao = document.createElement("button");
         botao.type = "button";
         botao.className = "perfil-card";
@@ -380,6 +485,7 @@ function salvarNovoPersonagem(evento) {
 
     perfis.push(novoPerfil);
     salvarPerfis();
+    renderizarCategorias();
     renderizarPerfis();
     selecionarPerfil(novoPerfil.id);
 }
@@ -410,12 +516,21 @@ function finalizarUso() {
 function voltarAoInicio() {
     perfilSelecionado = null;
     inicioUso = null;
-    renderizarPerfis();
+
+    if (categoriaAberta) {
+        document.getElementById("visao-categorias").classList.add("escondido");
+        document.getElementById("visao-perfis-categoria").classList.remove("escondido");
+        renderizarPerfis();
+    } else {
+        voltarParaCategorias();
+    }
+
     mostrarTela("tela-inicio");
 }
 
 function configurarEventos() {
     document.getElementById("botao-criar-perfil").addEventListener("click", abrirCriador);
+    document.getElementById("botao-voltar-categorias").addEventListener("click", voltarParaCategorias);
     document.getElementById("botao-sair-criador").addEventListener("click", voltarAoInicio);
     document.getElementById("botao-voltar-perfis").addEventListener("click", voltarAoInicio);
     document.getElementById("botao-proxima-etapa").addEventListener("click", proximaEtapa);
@@ -434,7 +549,7 @@ function configurarEventos() {
 function inicializar() {
     salvarPerfis();
     configurarEventos();
-    renderizarPerfis();
+    renderizarCategorias();
     renderizarOpcoesCriador();
 }
 
