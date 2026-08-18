@@ -1,4 +1,5 @@
 const CHAVE_PERFIS = "cafeteiraTamandutechPerfisBetaV1";
+const VERSAO_FIREBASE = "12.16.0";
 
 const CATEGORIAS = [
     { nome: "Administrativo", icone: "📋", descricao: "Gestão e organização da equipe" },
@@ -38,7 +39,8 @@ const OPCOES_AVATAR = {
         { id: "castanho", nome: "Castanho", cor: "#5b392b", sombra: "#35251f", brilho: "#81543b" },
         { id: "preto", nome: "Preto", cor: "#27242b", sombra: "#17161c", brilho: "#4b4551" },
         { id: "loiro", nome: "Loiro", cor: "#d4a94f", sombra: "#9a7435", brilho: "#f0ca6d" },
-        { id: "ruivo", nome: "Ruivo", cor: "#a84f31", sombra: "#713323", brilho: "#d06b3f" }
+        { id: "ruivo", nome: "Ruivo", cor: "#a84f31", sombra: "#713323", brilho: "#d06b3f" },
+        { id: "branco", nome: "Branco", cor: "#e9e7df", sombra: "#aaa9a5", brilho: "#fffdf7" }
     ],
     roupas: [
         { id: "verde", nome: "Casual verde", cor: "#4d8b62", sombra: "#2f6548", brilho: "#76af7e", detalhe: "#f1c75b" },
@@ -58,6 +60,8 @@ let categoriaAberta = null;
 let inicioUso = null;
 let etapaAtual = 1;
 let rascunho = criarRascunho();
+let conexaoFirebase = null;
+let estadoCafeteiraCompartilhado = null;
 
 function criarRascunho() {
     return {
@@ -91,6 +95,164 @@ function salvarPerfis() {
         localStorage.setItem(CHAVE_PERFIS, JSON.stringify(perfis));
     } catch (erro) {
         console.warn("Não foi possível salvar os perfis localmente.", erro);
+    }
+}
+
+function atualizarStatusSincronizacao(tipo, mensagem) {
+    const status = document.getElementById("status-sincronizacao");
+    status.className = `status-sincronizacao ${tipo}`;
+    document.getElementById("texto-sincronizacao").textContent = mensagem;
+}
+
+function formatarHorario(valor) {
+    if (!valor) return "horário não informado";
+    return new Date(valor).toLocaleTimeString("pt-BR", {
+        hour: "2-digit",
+        minute: "2-digit"
+    });
+}
+
+function atualizarDisponibilidadeCafeteira() {
+    const aviso = document.getElementById("aviso-cafeteira");
+    const botao = document.getElementById("botao-comecar-uso");
+    const textoBotao = document.getElementById("texto-botao-comecar");
+    const estado = estadoCafeteiraCompartilhado;
+
+    aviso.classList.toggle("escondido", !estado);
+
+    if (!estado) {
+        botao.disabled = false;
+        textoBotao.textContent = "Vou usar a cafeteira";
+        return;
+    }
+
+    document.getElementById("titulo-aviso-cafeteira").textContent =
+        `Cafeteira em uso por ${estado.nome}`;
+    document.getElementById("detalhe-aviso-cafeteira").textContent =
+        `${estado.categorias} · desde ${formatarHorario(estado.inicioEm)}`;
+    botao.disabled = true;
+    textoBotao.textContent = `Em uso por ${estado.nome}`;
+}
+
+function normalizarPerfilRemoto(valor) {
+    if (!valor || typeof valor !== "object" || !valor.id || !valor.nome || !valor.avatar) {
+        return null;
+    }
+
+    return {
+        id: String(valor.id),
+        nome: String(valor.nome).slice(0, 24),
+        administrativo: Boolean(valor.administrativo),
+        categoriaTecnica: CATEGORIAS_TECNICAS.includes(valor.categoriaTecnica)
+            ? valor.categoriaTecnica
+            : null,
+        avatar: {
+            pele: buscarOpcao("peles", valor.avatar.pele).id,
+            cabelo: buscarOpcao("cabelos", valor.avatar.cabelo).id,
+            corCabelo: buscarOpcao("coresCabelo", valor.avatar.corCabelo).id,
+            roupa: buscarOpcao("roupas", valor.avatar.roupa).id
+        }
+    };
+}
+
+function prepararPerfilRemoto(perfil) {
+    return {
+        ...perfil,
+        criadorUid: conexaoFirebase.usuarioUid,
+        criadoEm: Date.now()
+    };
+}
+
+async function publicarPerfilNoFirebase(perfil) {
+    if (!conexaoFirebase) return;
+
+    const { database, ref, set } = conexaoFirebase;
+    atualizarStatusSincronizacao("conectando", "Sincronizando novo personagem…");
+
+    try {
+        await set(ref(database, `perfis/${perfil.id}`), prepararPerfilRemoto(perfil));
+        atualizarStatusSincronizacao("online", "Personagens sincronizados em tempo real");
+    } catch (erro) {
+        console.error("Não foi possível publicar o personagem.", erro);
+        atualizarStatusSincronizacao("erro", "Personagem salvo localmente; sincronização indisponível");
+    }
+}
+
+function aplicarPerfisRemotos(valor) {
+    const perfisRemotos = Object.values(valor || {})
+        .map(normalizarPerfilRemoto)
+        .filter(Boolean);
+
+    perfis = perfisRemotos;
+    salvarPerfis();
+    renderizarCategorias();
+    if (categoriaAberta) renderizarPerfis();
+    retomarUsoSeNecessario();
+}
+
+async function migrarPerfisLocais(perfisLocais) {
+    const { database, ref, get, set } = conexaoFirebase;
+
+    for (const perfil of perfisLocais) {
+        const referenciaPerfil = ref(database, `perfis/${perfil.id}`);
+        const existente = await get(referenciaPerfil);
+        if (!existente.exists()) {
+            await set(referenciaPerfil, prepararPerfilRemoto(perfil));
+        }
+    }
+}
+
+async function configurarSincronizacao() {
+    const configuracao = window.FIREBASE_CONFIG;
+
+    if (!configuracao?.apiKey || !configuracao?.databaseURL || !configuracao?.projectId) {
+        atualizarStatusSincronizacao("local", "Personagens salvos neste dispositivo");
+        return;
+    }
+
+    atualizarStatusSincronizacao("conectando", "Conectando os personagens…");
+
+    try {
+        const [appSdk, authSdk, databaseSdk] = await Promise.all([
+            import(`https://www.gstatic.com/firebasejs/${VERSAO_FIREBASE}/firebase-app.js`),
+            import(`https://www.gstatic.com/firebasejs/${VERSAO_FIREBASE}/firebase-auth.js`),
+            import(`https://www.gstatic.com/firebasejs/${VERSAO_FIREBASE}/firebase-database.js`)
+        ]);
+        const app = appSdk.initializeApp(configuracao);
+        const autenticacao = authSdk.getAuth(app);
+        const credencial = await authSdk.signInAnonymously(autenticacao);
+        const database = databaseSdk.getDatabase(app);
+        const perfisLocais = [...perfis];
+
+        conexaoFirebase = {
+            database,
+            usuarioUid: credencial.user.uid,
+            ref: databaseSdk.ref,
+            get: databaseSdk.get,
+            set: databaseSdk.set,
+            onValue: databaseSdk.onValue,
+            runTransaction: databaseSdk.runTransaction
+        };
+
+        await migrarPerfisLocais(perfisLocais);
+
+        databaseSdk.onValue(databaseSdk.ref(database, "perfis"), snapshot => {
+            aplicarPerfisRemotos(snapshot.val());
+            atualizarStatusSincronizacao("online", "Personagens sincronizados em tempo real");
+        }, erro => {
+            console.error("Falha ao acompanhar os personagens.", erro);
+            atualizarStatusSincronizacao("erro", "Sem conexão; mostrando a última cópia salva");
+        });
+
+        databaseSdk.onValue(databaseSdk.ref(database, "estadoCafeteira"), snapshot => {
+            estadoCafeteiraCompartilhado = snapshot.val();
+            atualizarDisponibilidadeCafeteira();
+            retomarUsoSeNecessario();
+        });
+    } catch (erro) {
+        console.error("Não foi possível iniciar o Firebase.", erro);
+        conexaoFirebase = null;
+        atualizarStatusSincronizacao("erro", "Sem conexão; personagens salvos neste dispositivo");
     }
 }
 
@@ -286,6 +448,7 @@ function selecionarPerfil(idPerfil) {
     });
 
     mostrarTela("tela-perfil");
+    atualizarDisponibilidadeCafeteira();
 }
 
 function abrirCriador() {
@@ -506,30 +669,139 @@ function salvarNovoPersonagem(evento) {
     salvarPerfis();
     renderizarCategorias();
     renderizarPerfis();
+    void publicarPerfilNoFirebase(novoPerfil);
     selecionarPerfil(novoPerfil.id);
 }
 
-function comecarUso() {
-    if (!perfilSelecionado) return;
+async function reservarCafeteira(perfil) {
+    const inicioEm = Date.now();
 
-    inicioUso = new Date();
-    const horario = inicioUso.toLocaleTimeString("pt-BR", {
-        hour: "2-digit",
-        minute: "2-digit"
-    });
+    if (!conexaoFirebase) {
+        return { sucesso: true, inicioEm };
+    }
+
+    const { database, ref, runTransaction, usuarioUid } = conexaoFirebase;
+    const resultado = await runTransaction(
+        ref(database, "estadoCafeteira"),
+        estadoAtual => {
+            if (estadoAtual) return;
+
+            return {
+                perfilId: perfil.id,
+                nome: perfil.nome,
+                categorias: resumoDasCategorias(perfil),
+                inicioEm,
+                usuarioUid
+            };
+        },
+        { applyLocally: false }
+    );
+
+    return {
+        sucesso: resultado.committed,
+        inicioEm,
+        estado: resultado.snapshot.val()
+    };
+}
+
+async function liberarCafeteira() {
+    if (!conexaoFirebase) return true;
+
+    const { database, ref, runTransaction, usuarioUid } = conexaoFirebase;
+    const resultado = await runTransaction(
+        ref(database, "estadoCafeteira"),
+        estadoAtual => {
+            if (!estadoAtual) return null;
+            if (estadoAtual.usuarioUid !== usuarioUid) return;
+            return null;
+        },
+        { applyLocally: false }
+    );
+
+    return resultado.committed;
+}
+
+function preencherTelaEmUso() {
+    if (!perfilSelecionado || !inicioUso) return;
 
     document.getElementById("mensagem-uso").textContent =
         `${perfilSelecionado.nome} está usando a cafeteira.`;
-    document.getElementById("horario-uso").textContent = `Início: ${horario}`;
+    document.getElementById("horario-uso").textContent =
+        `Início: ${formatarHorario(inicioUso.getTime())}`;
+}
+
+function retomarUsoSeNecessario() {
+    if (!conexaoFirebase || !estadoCafeteiraCompartilhado || inicioUso) return;
+    if (estadoCafeteiraCompartilhado.usuarioUid !== conexaoFirebase.usuarioUid) return;
+
+    const perfilEmUso = perfis.find(perfil => perfil.id === estadoCafeteiraCompartilhado.perfilId);
+    if (!perfilEmUso) return;
+
+    perfilSelecionado = perfilEmUso;
+    inicioUso = new Date(estadoCafeteiraCompartilhado.inicioEm);
+    preencherTelaEmUso();
     mostrarTela("tela-em-uso");
 }
 
-function finalizarUso() {
+async function comecarUso() {
+    if (!perfilSelecionado) return;
+
+    const botao = document.getElementById("botao-comecar-uso");
+    botao.disabled = true;
+
+    try {
+        const reserva = await reservarCafeteira(perfilSelecionado);
+
+        if (!reserva.sucesso) {
+            estadoCafeteiraCompartilhado = reserva.estado;
+            atualizarDisponibilidadeCafeteira();
+            return;
+        }
+
+        inicioUso = new Date(reserva.inicioEm);
+        if (conexaoFirebase) {
+            estadoCafeteiraCompartilhado = reserva.estado;
+            atualizarDisponibilidadeCafeteira();
+        }
+        preencherTelaEmUso();
+        mostrarTela("tela-em-uso");
+    } catch (erro) {
+        console.error("Não foi possível reservar a cafeteira.", erro);
+        document.getElementById("detalhe-aviso-cafeteira").textContent =
+            "Não foi possível confirmar a disponibilidade. Tente novamente.";
+        document.getElementById("aviso-cafeteira").classList.remove("escondido");
+        botao.disabled = false;
+    }
+}
+
+async function finalizarUso() {
     if (!perfilSelecionado || !inicioUso) return;
 
+    const botao = document.getElementById("botao-finalizar-uso");
+    botao.disabled = true;
+
+    try {
+        const liberada = await liberarCafeteira();
+        if (!liberada) {
+            document.getElementById("horario-uso").textContent =
+                "Não foi possível liberar a cafeteira. Verifique a conexão e tente novamente.";
+            botao.disabled = false;
+            return;
+        }
+    } catch (erro) {
+        console.error("Não foi possível liberar a cafeteira.", erro);
+        document.getElementById("horario-uso").textContent =
+            "Não foi possível liberar a cafeteira. Verifique a conexão e tente novamente.";
+        botao.disabled = false;
+        return;
+    }
+
+    estadoCafeteiraCompartilhado = null;
+    atualizarDisponibilidadeCafeteira();
     document.getElementById("titulo-conclusao").textContent =
         `Obrigada, ${perfilSelecionado.nome}!`;
     mostrarTela("tela-conclusao");
+    botao.disabled = false;
 }
 
 function voltarAoInicio() {
@@ -572,6 +844,8 @@ function inicializar() {
     configurarEventos();
     renderizarCategorias();
     renderizarOpcoesCriador();
+    atualizarDisponibilidadeCafeteira();
+    void configurarSincronizacao();
 }
 
 inicializar();

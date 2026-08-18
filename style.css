@@ -1,4 +1,5 @@
 :root {
+    color-scheme: only light;
     --creme: #f3e9c9;
     --creme-claro: #fffaf0;
     --marrom: #4b362c;
@@ -11,6 +12,11 @@
     --terracota: #9d564d;
     --vermelho: #a8463b;
     --sombra: #2a211b;
+}
+
+html {
+    color-scheme: only light;
+    background: #7f937b;
 }
 
 * {
@@ -37,6 +43,14 @@ input {
 
 button {
     color: inherit;
+}
+
+button:disabled {
+    cursor: not-allowed;
+    filter: saturate(0.55);
+    opacity: 0.72;
+    transform: none !important;
+    box-shadow: none !important;
 }
 
 .painel {
@@ -90,6 +104,83 @@ button {
     content: "";
     background: radial-gradient(circle, #f8d96d 0 2px, transparent 3px) 0 0 / 28px 7px repeat-x;
     opacity: 0.8;
+}
+
+.status-sincronizacao {
+    display: flex;
+    min-height: 34px;
+    padding: 7px 14px;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    color: #fffdf2;
+    background: var(--verde-escuro);
+    border-bottom: 3px solid var(--marrom);
+    font-family: "Courier New", monospace;
+    font-size: 0.72rem;
+    font-weight: 800;
+}
+
+.status-sincronizacao-ponto {
+    width: 9px;
+    height: 9px;
+    background: #d0b86c;
+    border: 2px solid var(--marrom);
+}
+
+.status-sincronizacao.online .status-sincronizacao-ponto {
+    background: #75d388;
+}
+
+.status-sincronizacao.conectando .status-sincronizacao-ponto {
+    background: var(--amarelo);
+    animation: pulsar-status 850ms steps(2, end) infinite;
+}
+
+.status-sincronizacao.erro {
+    background: var(--terracota);
+}
+
+.status-sincronizacao.erro .status-sincronizacao-ponto {
+    background: #ffd8c7;
+}
+
+.aviso-cafeteira {
+    display: flex;
+    margin: 14px clamp(14px, 5vw, 30px) 0;
+    padding: 12px 14px;
+    align-items: center;
+    gap: 12px;
+    color: #fffdf2;
+    background: #713c35;
+    border: 3px solid var(--marrom);
+    box-shadow: 4px 4px 0 rgba(42, 33, 27, 0.24);
+    text-align: left;
+}
+
+.aviso-cafeteira > span:last-child {
+    display: grid;
+    gap: 2px;
+}
+
+.aviso-cafeteira small {
+    color: #f2dfc6;
+    font-size: 0.76rem;
+}
+
+.aviso-cafeteira-luz {
+    width: 20px;
+    height: 20px;
+    flex: 0 0 auto;
+    background: #e75b45;
+    border: 3px solid var(--marrom);
+    box-shadow: inset 4px 4px 0 #ff9b78;
+}
+
+@keyframes pulsar-status {
+    50% {
+        opacity: 0.35;
+    }
 }
 
 .cabecalho-principal h1,
@@ -595,6 +686,7 @@ button.opcao-cor.selecionada {
     background: var(--cor-opcao);
     border: 3px solid var(--marrom);
     box-shadow: inset 5px 0 0 rgba(255, 255, 255, 0.18);
+    overflow: hidden;
 }
 
 .amostra-roupa.uniforme-verde::before,
@@ -610,14 +702,14 @@ button.opcao-cor.selecionada {
 }
 
 .amostra-roupa.uniforme-branco::before {
-    top: 15px;
-    right: 3px;
+    top: 17px;
+    right: 5px;
     bottom: auto;
     left: 3px;
-    width: 24px;
+    width: 20px;
     height: 3px;
-    box-shadow: 5px 5px 0 var(--cor-detalhe), 10px 10px 0 var(--cor-detalhe);
-    transform: rotate(-24deg);
+    box-shadow: 4px 5px 0 var(--cor-detalhe), 8px 10px 0 var(--cor-detalhe);
+    transform: rotate(-20deg);
 }
 
 .acoes-formulario {
@@ -702,7 +794,11 @@ button.opcao-cor.selecionada {
     align-items: flex-end;
     justify-content: center;
     background:
-        linear-gradient(to bottom, #98c8da 0 55%, #b8d780 55% 65%, #75a957 65% 100%);
+        linear-gradient(var(--marrom) 0 0) calc(100% - 20px) 66px / 126px 6px no-repeat,
+        linear-gradient(rgba(97, 90, 82, 0.08) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(97, 90, 82, 0.08) 1px, transparent 1px),
+        linear-gradient(to bottom, #fbfaf5 0 74%, #b7aea2 74% 100%);
+    background-size: 126px 6px, 22px 22px, 22px 22px, auto;
     border: 3px solid var(--marrom);
     border-radius: 5px;
     box-shadow: inset 0 -18px 0 rgba(49, 101, 72, 0.18);
@@ -710,26 +806,47 @@ button.opcao-cor.selecionada {
 
 .preview-avatar::before {
     position: absolute;
-    top: 25px;
-    left: 22px;
-    width: 35px;
-    height: 12px;
+    z-index: 1;
+    top: 28px;
+    right: 76px;
+    width: 8px;
+    height: 10px;
     content: "";
-    background: rgba(255, 253, 242, 0.78);
-    box-shadow: 16px -7px 0 rgba(255, 253, 242, 0.78), 31px 2px 0 rgba(255, 253, 242, 0.78);
+    background: #d5a833;
+    box-shadow:
+        -5px -3px 0 #d5a833,
+        5px -3px 0 #d5a833,
+        0 10px 0 #b77a27,
+        -3px 15px 0 #b77a27,
+        3px 15px 0 #b77a27,
+        -38px 0 0 #d5a833,
+        -43px -3px 0 #d5a833,
+        -33px -3px 0 #d5a833,
+        -38px 10px 0 #b77a27,
+        -41px 15px 0 #b77a27,
+        -35px 15px 0 #b77a27,
+        38px 0 0 #d5a833,
+        33px -3px 0 #d5a833,
+        43px -3px 0 #d5a833,
+        38px 10px 0 #b77a27,
+        35px 15px 0 #b77a27,
+        41px 15px 0 #b77a27;
 }
 
 .preview-avatar::after {
     position: absolute;
     z-index: 0;
-    right: 0;
-    bottom: 50px;
-    left: 0;
-    height: 9px;
+    bottom: 29px;
+    left: 50%;
+    width: min(74%, 280px);
+    height: 76px;
     content: "";
-    background: repeating-linear-gradient(90deg, #b1784e 0 17px, #8a583c 17px 21px);
-    border-top: 3px solid var(--marrom);
-    border-bottom: 3px solid var(--marrom);
+    background:
+        repeating-linear-gradient(90deg, #25262b 0 52px, #18191d 52px 56px),
+        #202126;
+    border: 4px solid var(--marrom);
+    box-shadow: inset 0 -16px 0 #121318, -14px 15px 0 -5px #191a1e, 14px 15px 0 -5px #191a1e;
+    transform: translateX(-50%);
 }
 
 .avatar-container {
@@ -892,6 +1009,28 @@ button.opcao-cor.selecionada {
     box-shadow: inset 0 -9px 0 var(--roupa-sombra), inset 5px 0 0 var(--roupa-brilho);
 }
 
+.roupa-uniforme-verde .corpo-sprite {
+    background:
+        linear-gradient(90deg,
+            transparent 0 8px,
+            var(--roupa-detalhe) 8px 11px,
+            transparent 11px 15px,
+            var(--roupa-detalhe) 15px 18px,
+            transparent 18px 100%),
+        var(--roupa);
+}
+
+.roupa-uniforme-branco .corpo-sprite {
+    background:
+        linear-gradient(164deg,
+            transparent 0 55%,
+            var(--roupa-detalhe) 55% 61%,
+            transparent 61% 67%,
+            var(--roupa-detalhe) 67% 73%,
+            transparent 73% 100%),
+        var(--roupa);
+}
+
 .roupa-uniforme-verde .braco-sprite {
     background: linear-gradient(to bottom,
             var(--roupa) 0 13px,
@@ -923,49 +1062,28 @@ button.opcao-cor.selecionada {
     box-shadow: 3px 3px 0 var(--roupa-detalhe);
 }
 
-.roupa-uniforme-verde .faixa-uniforme-sprite,
-.roupa-uniforme-branco .faixa-uniforme-sprite,
 .roupa-uniforme-verde .marca-uniforme-sprite,
 .roupa-uniforme-branco .marca-uniforme-sprite {
     z-index: 6;
     display: block !important;
 }
 
-.roupa-uniforme-verde .faixa-uniforme-sprite {
-    top: 114px;
-    left: 35px;
-    width: 4px;
-    height: 25px;
-    background: var(--roupa-detalhe);
-    box-shadow: 5px 4px 0 var(--roupa-detalhe), 10px 8px 0 var(--roupa-detalhe);
-}
-
 .roupa-uniforme-verde .marca-uniforme-sprite {
-    top: 133px;
-    left: 55px;
-    width: 14px;
+    top: 132px;
+    left: 59px;
+    width: 10px;
     height: 3px;
     background: #d8a92e;
-    box-shadow: 4px -4px 0 #d8a92e;
-}
-
-.roupa-uniforme-branco .faixa-uniforme-sprite {
-    top: 128px;
-    left: 32px;
-    width: 51px;
-    height: 4px;
-    background: var(--roupa-detalhe);
-    box-shadow: 8px 5px 0 var(--roupa-detalhe), 16px 10px 0 var(--roupa-detalhe);
-    transform: rotate(-18deg);
+    box-shadow: 3px -4px 0 #d8a92e;
 }
 
 .roupa-uniforme-branco .marca-uniforme-sprite {
-    top: 108px;
-    left: 34px;
-    width: 18px;
+    top: 112px;
+    left: 37px;
+    width: 12px;
     height: 4px;
     background: var(--roupa-detalhe);
-    box-shadow: 4px 5px 0 var(--roupa-detalhe);
+    box-shadow: 3px 5px 0 var(--roupa-detalhe);
 }
 
 .pescoco-sprite {
@@ -1147,7 +1265,27 @@ button.opcao-cor.selecionada {
     left: 18px;
     width: 84px;
     height: 84px;
-    box-shadow: -4px 18px 0 var(--cabelo), 5px 26px 0 var(--cabelo-sombra), inset 8px 0 0 var(--cabelo-brilho);
+    box-shadow: inset 8px 0 0 var(--cabelo-brilho), inset -8px 0 0 var(--cabelo-sombra);
+}
+
+.cabelo-ondulado .cabelo-fundo-sprite::before,
+.cabelo-ondulado .cabelo-fundo-sprite::after {
+    position: absolute;
+    bottom: -7px;
+    width: 12px;
+    height: 18px;
+    content: "";
+    background: var(--cabelo);
+    border: 3px solid var(--marrom);
+}
+
+.cabelo-ondulado .cabelo-fundo-sprite::before {
+    left: -7px;
+}
+
+.cabelo-ondulado .cabelo-fundo-sprite::after {
+    right: -7px;
+    background: var(--cabelo-sombra);
 }
 
 .cabelo-ondulado .franja-sprite {
@@ -1163,7 +1301,19 @@ button.opcao-cor.selecionada {
     left: 19px;
     width: 82px;
     height: 74px;
-    box-shadow: 47px -19px 0 -1px var(--cabelo), 47px -19px 0 3px var(--marrom), inset 7px 0 0 var(--cabelo-brilho);
+    box-shadow: inset 7px 0 0 var(--cabelo-brilho), inset -7px 0 0 var(--cabelo-sombra);
+}
+
+.cabelo-coque .cabelo-fundo-sprite::after {
+    position: absolute;
+    top: -22px;
+    right: -2px;
+    width: 28px;
+    height: 22px;
+    content: "";
+    background: var(--cabelo);
+    border: 4px solid var(--marrom);
+    box-shadow: inset -6px -4px 0 var(--cabelo-sombra), inset 5px 4px 0 var(--cabelo-brilho);
 }
 
 .cabelo-coque .cabelo-topo-sprite {
@@ -1209,17 +1359,36 @@ button.opcao-cor.selecionada {
 }
 
 .cabelo-trancas .cabelo-fundo-sprite {
-    top: 22px;
-    left: 19px;
-    width: 82px;
-    height: 66px;
-    background: transparent;
-    border-color: transparent;
-    box-shadow:
-        0 0 0 4px var(--marrom),
-        0 0 0 8px var(--cabelo),
-        -2px 50px 0 -1px var(--cabelo),
-        62px 50px 0 -1px var(--cabelo-sombra);
+    top: 21px;
+    left: 21px;
+    width: 78px;
+    height: 68px;
+    background: var(--cabelo-sombra);
+    border-color: var(--marrom);
+    box-shadow: inset 7px 0 0 var(--cabelo-brilho);
+}
+
+.cabelo-trancas .cabelo-fundo-sprite::before,
+.cabelo-trancas .cabelo-fundo-sprite::after {
+    position: absolute;
+    top: 48px;
+    width: 12px;
+    height: 48px;
+    content: "";
+    background: repeating-linear-gradient(
+        to bottom,
+        var(--cabelo) 0 7px,
+        var(--cabelo-sombra) 7px 12px
+    );
+    border: 3px solid var(--marrom);
+}
+
+.cabelo-trancas .cabelo-fundo-sprite::before {
+    left: -6px;
+}
+
+.cabelo-trancas .cabelo-fundo-sprite::after {
+    right: -6px;
 }
 
 .cabelo-trancas .cabelo-topo-sprite {
@@ -1234,10 +1403,33 @@ button.opcao-cor.selecionada {
 
 .cabelo-rabo .cabelo-fundo-sprite {
     top: 22px;
-    left: 18px;
-    width: 84px;
-    height: 75px;
-    box-shadow: 54px 39px 0 -3px var(--cabelo-sombra), 62px 51px 0 -5px var(--cabelo-sombra), inset 7px 0 var(--cabelo-brilho);
+    left: 20px;
+    width: 80px;
+    height: 72px;
+    box-shadow: inset 7px 0 0 var(--cabelo-brilho), inset -7px 0 0 var(--cabelo-sombra);
+}
+
+.cabelo-rabo .cabelo-fundo-sprite::before {
+    position: absolute;
+    top: 31px;
+    right: -21px;
+    width: 19px;
+    height: 12px;
+    content: "";
+    background: #d5a833;
+    border: 3px solid var(--marrom);
+}
+
+.cabelo-rabo .cabelo-fundo-sprite::after {
+    position: absolute;
+    top: 39px;
+    right: -29px;
+    width: 24px;
+    height: 48px;
+    content: "";
+    background: linear-gradient(to right, var(--cabelo), var(--cabelo-sombra));
+    border: 4px solid var(--marrom);
+    box-shadow: inset 5px 6px 0 var(--cabelo-brilho);
 }
 
 .cabelo-rabo .franja-sprite {

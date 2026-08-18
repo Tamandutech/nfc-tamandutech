@@ -16,6 +16,11 @@ Este arquivo registra a ordem combinada para o projeto. Uma etapa só começa de
 - [x] Adicionar versões verde e branca do uniforme Tamandutech
 - [x] Substituir o emoji de café por ícone próprio em pixel art
 - [x] Preparar a beta sem personagens predefinidos e com armazenamento isolado
+- [x] Corrigir blocos indevidos em tranças, coque e rabo de cavalo
+- [x] Conter os detalhes dos uniformes dentro da camisa
+- [x] Trocar o cenário por parede clara, sofá preto e troféus
+- [x] Forçar o esquema de cores claro nos navegadores
+- [x] Adicionar cabelo branco, mantendo a opção ruiva
 - [ ] Validar a experiência em celulares Android e iPhone
 - [ ] Confirmar nomes e categorias reais dos integrantes
 - [x] Evoluir o avatar provisório para um sprite original de corpo inteiro
@@ -23,10 +28,15 @@ Este arquivo registra a ordem combinada para o projeto. Uma etapa só começa de
 
 ## Etapa 2 — Firebase Realtime Database
 
-- [ ] Definir a estrutura final de usuários, status e logs
-- [ ] Configurar o projeto Firebase e as regras de segurança
-- [ ] Migrar os perfis locais para o banco
-- [ ] Sincronizar o estado da cafeteira em tempo real
+- [x] Definir a estrutura inicial de usuários e status
+- [x] Criar o projeto Firebase e conectar a configuração Web
+- [x] Ativar autenticação anônima e autorizar `tamandutech.github.io`
+- [x] Criar o Realtime Database no plano Spark e publicar as regras
+- [x] Preparar regras com autenticação anônima
+- [x] Preparar migração dos perfis locais para o banco
+- [x] Sincronizar os perfis em tempo real
+- [x] Reservar a cafeteira com transação para impedir dois usos simultâneos
+- [x] Sincronizar o estado da cafeteira em tempo real
 - [ ] Registrar início, fim, duração, categoria e confirmação de limpeza
 - [ ] Validar o fluxo simultaneamente em dois celulares
 

@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#315f4a">
+    <meta name="color-scheme" content="light only">
     <title>Cafeteira Tamandutech</title>
     <link rel="stylesheet" href="style.css">
 </head>
@@ -24,6 +25,19 @@
                 <h1>Cafeteira</h1>
             </div>
         </header>
+
+        <div id="status-sincronizacao" class="status-sincronizacao local" role="status" aria-live="polite">
+            <span class="status-sincronizacao-ponto" aria-hidden="true"></span>
+            <span id="texto-sincronizacao">Personagens salvos neste dispositivo</span>
+        </div>
+
+        <aside id="aviso-cafeteira" class="aviso-cafeteira escondido" aria-live="polite">
+            <span class="aviso-cafeteira-luz" aria-hidden="true"></span>
+            <span>
+                <strong id="titulo-aviso-cafeteira">Cafeteira em uso</strong>
+                <small id="detalhe-aviso-cafeteira"></small>
+            </span>
+        </aside>
 
         <section id="tela-inicio" class="tela">
             <div id="visao-categorias">
@@ -156,7 +170,7 @@
                     <span class="alca-pixel"></span>
                     <span class="pires-pixel"></span>
                 </span>
-                Vou usar a cafeteira
+                <span id="texto-botao-comecar">Vou usar a cafeteira</span>
             </button>
         </section>
 
@@ -196,6 +210,7 @@
         </section>
     </main>
 
+    <script src="firebase-config.js"></script>
     <script src="script.js"></script>
 </body>
 
