@@ -1,0 +1,18 @@
+{
+  "rules": {
+    "perfis": {
+      ".read": "auth != null",
+      "$perfilId": {
+        ".write": "auth != null && !data.exists() && newData.child('criadorUid').val() === auth.uid",
+        ".validate": "newData.hasChildren(['id', 'nome', 'administrativo', 'avatar', 'criadorUid']) && newData.child('id').val() === $perfilId && newData.child('nome').isString() && newData.child('administrativo').isBoolean() && newData.child('avatar').hasChildren(['pele', 'cabelo', 'corCabelo', 'roupa'])"
+      }
+    },
+    "estadoCafeteira": {
+      ".read": "auth != null",
+      ".write": "auth != null && ((!data.exists() && newData.exists() && newData.child('usuarioUid').val() === auth.uid) || (data.exists() && data.child('usuarioUid').val() === auth.uid && !newData.exists()))",
+      ".validate": "!newData.exists() || newData.hasChildren(['perfilId', 'nome', 'categorias', 'inicioEm', 'usuarioUid'])"
+    },
+    ".read": false,
+    ".write": false
+  }
+}
