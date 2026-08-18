@@ -1,4 +1,4 @@
-const CHAVE_PERFIS = "cafeteiraTamandutechPerfis";
+const CHAVE_PERFIS = "cafeteiraTamandutechPerfisBetaV1";
 
 const CATEGORIAS = [
     { nome: "Administrativo", icone: "📋", descricao: "Gestão e organização da equipe" },
@@ -24,7 +24,15 @@ const OPCOES_AVATAR = {
         { id: "curto", nome: "Curto" },
         { id: "longo", nome: "Longo" },
         { id: "cacheado", nome: "Cacheado" },
-        { id: "raspado", nome: "Raspado" }
+        { id: "raspado", nome: "Raspado" },
+        { id: "ondulado", nome: "Ondulado" },
+        { id: "coque", nome: "Coque" },
+        { id: "afro", nome: "Afro" },
+        { id: "moicano", nome: "Moicano" },
+        { id: "trancas", nome: "Tranças" },
+        { id: "rabo", nome: "Rabo de cavalo" },
+        { id: "franja", nome: "Franja" },
+        { id: "lateral", nome: "Lateral" }
     ],
     coresCabelo: [
         { id: "castanho", nome: "Castanho", cor: "#5b392b", sombra: "#35251f", brilho: "#81543b" },
@@ -33,23 +41,16 @@ const OPCOES_AVATAR = {
         { id: "ruivo", nome: "Ruivo", cor: "#a84f31", sombra: "#713323", brilho: "#d06b3f" }
     ],
     roupas: [
-        { id: "verde", nome: "Verde", cor: "#4d8b62", sombra: "#2f6548", brilho: "#76af7e" },
-        { id: "azul", nome: "Azul", cor: "#477ca6", sombra: "#315476", brilho: "#6ba6c9" },
-        { id: "vermelha", nome: "Vermelha", cor: "#a8463b", sombra: "#722f2c", brilho: "#d06452" },
-        { id: "amarela", nome: "Amarela", cor: "#d5a93f", sombra: "#95712f", brilho: "#efca60" }
+        { id: "verde", nome: "Casual verde", cor: "#4d8b62", sombra: "#2f6548", brilho: "#76af7e", detalhe: "#f1c75b" },
+        { id: "azul", nome: "Casual azul", cor: "#477ca6", sombra: "#315476", brilho: "#6ba6c9", detalhe: "#f1c75b" },
+        { id: "vermelha", nome: "Casual vermelha", cor: "#a8463b", sombra: "#722f2c", brilho: "#d06452", detalhe: "#f1c75b" },
+        { id: "amarela", nome: "Casual amarela", cor: "#d5a93f", sombra: "#95712f", brilho: "#efca60", detalhe: "#f6edcf" },
+        { id: "uniforme-verde", nome: "Uniforme verde", cor: "#145c39", sombra: "#0a3d29", brilho: "#2d8052", detalhe: "#f4f0df" },
+        { id: "uniforme-branco", nome: "Uniforme branco", cor: "#f2f1e9", sombra: "#c9cec4", brilho: "#ffffff", detalhe: "#167044" }
     ]
 };
 
-const PERFIS_INICIAIS = [
-    criarPerfilInicial("rafaela", "Rafaela", true, null, "pele-2", "longo", "castanho", "verde"),
-    criarPerfilInicial("falbo", "Falbo", true, null, "pele-1", "curto", "preto", "azul"),
-    criarPerfilInicial("bubu", "Bubu", false, "Combate", "pele-3", "cacheado", "preto", "vermelha"),
-    criarPerfilInicial("liz", "Liz", false, "Combate", "pele-2", "longo", "ruivo", "azul"),
-    criarPerfilInicial("faustino", "Faustino", false, "Hockey", "pele-1", "curto", "castanho", "verde"),
-    criarPerfilInicial("camis", "Camis", false, "Sumô", "pele-2", "cacheado", "castanho", "amarela"),
-    criarPerfilInicial("veloso", "Veloso", false, "Sumô LEGO", "pele-3", "raspado", "preto", "vermelha"),
-    criarPerfilInicial("lais", "Laís", false, "Seguidor de Linha", "pele-2", "longo", "preto", "verde")
-];
+const PERFIS_INICIAIS = [];
 
 let perfis = carregarPerfis();
 let perfilSelecionado = null;
@@ -57,16 +58,6 @@ let categoriaAberta = null;
 let inicioUso = null;
 let etapaAtual = 1;
 let rascunho = criarRascunho();
-
-function criarPerfilInicial(id, nome, administrativo, categoriaTecnica, pele, cabelo, corCabelo, roupa) {
-    return {
-        id,
-        nome,
-        administrativo,
-        categoriaTecnica,
-        avatar: { pele, cabelo, corCabelo, roupa }
-    };
-}
 
 function criarRascunho() {
     return {
@@ -85,14 +76,14 @@ function criarRascunho() {
 function carregarPerfis() {
     try {
         const perfisSalvos = JSON.parse(localStorage.getItem(CHAVE_PERFIS));
-        if (Array.isArray(perfisSalvos) && perfisSalvos.length > 0) {
+        if (Array.isArray(perfisSalvos)) {
             return perfisSalvos;
         }
     } catch (erro) {
         console.warn("Não foi possível carregar os perfis locais.", erro);
     }
 
-    return JSON.parse(JSON.stringify(PERFIS_INICIAIS));
+    return [...PERFIS_INICIAIS];
 }
 
 function salvarPerfis() {
@@ -136,7 +127,7 @@ function criarAvatar(perfil, tamanho = "normal") {
     container.setAttribute("aria-label", `Personagem de ${perfil.nome || "novo perfil"}`);
 
     const personagem = document.createElement("div");
-    personagem.className = `avatar-sprite cabelo-${avatar.cabelo}`;
+    personagem.className = `avatar-sprite cabelo-${avatar.cabelo} roupa-${avatar.roupa}`;
     personagem.style.setProperty("--pele", pele.cor);
     personagem.style.setProperty("--pele-sombra", pele.sombra);
     personagem.style.setProperty("--pele-brilho", pele.brilho);
@@ -147,6 +138,7 @@ function criarAvatar(perfil, tamanho = "normal") {
     personagem.style.setProperty("--roupa", roupa.cor);
     personagem.style.setProperty("--roupa-sombra", roupa.sombra);
     personagem.style.setProperty("--roupa-brilho", roupa.brilho);
+    personagem.style.setProperty("--roupa-detalhe", roupa.detalhe);
 
     [
         "sombra-sprite",
@@ -161,6 +153,8 @@ function criarAvatar(perfil, tamanho = "normal") {
         "gola-sprite gola-esquerda",
         "gola-sprite gola-direita",
         "emblema-sprite",
+        "faixa-uniforme-sprite",
+        "marca-uniforme-sprite",
         "pescoco-sprite",
         "orelha-sprite orelha-esquerda",
         "orelha-sprite orelha-direita",
@@ -306,10 +300,10 @@ function abrirCriador() {
 
 function renderizarOpcoesCriador() {
     renderizarCategoriasTecnicas();
-    renderizarOpcoesTexto("opcoes-cabelo", OPCOES_AVATAR.cabelos, "cabelo");
+    atualizarSeletorCabelo();
     renderizarOpcoesCor("opcoes-pele", OPCOES_AVATAR.peles, "pele");
     renderizarOpcoesCor("opcoes-cor-cabelo", OPCOES_AVATAR.coresCabelo, "corCabelo");
-    renderizarOpcoesCor("opcoes-roupa", OPCOES_AVATAR.roupas, "roupa");
+    renderizarOpcoesRoupa();
 }
 
 function renderizarCategoriasTecnicas() {
@@ -335,24 +329,21 @@ function renderizarCategoriasTecnicas() {
     });
 }
 
-function renderizarOpcoesTexto(idContainer, opcoes, campoAvatar) {
-    const container = document.getElementById(idContainer);
-    container.replaceChildren();
+function alterarCabelo(direcao) {
+    const indiceAtual = OPCOES_AVATAR.cabelos
+        .findIndex(opcao => opcao.id === rascunho.avatar.cabelo);
+    const total = OPCOES_AVATAR.cabelos.length;
+    const proximoIndice = (indiceAtual + direcao + total) % total;
+    rascunho.avatar.cabelo = OPCOES_AVATAR.cabelos[proximoIndice].id;
+    atualizarSeletorCabelo();
+    atualizarPreview();
+}
 
-    opcoes.forEach(opcao => {
-        const botao = document.createElement("button");
-        botao.type = "button";
-        botao.className = "opcao-chip";
-        botao.textContent = opcao.nome;
-        botao.classList.toggle("selecionada", rascunho.avatar[campoAvatar] === opcao.id);
-        botao.setAttribute("aria-pressed", String(rascunho.avatar[campoAvatar] === opcao.id));
-        botao.addEventListener("click", () => {
-            rascunho.avatar[campoAvatar] = opcao.id;
-            renderizarOpcoesTexto(idContainer, opcoes, campoAvatar);
-            atualizarPreview();
-        });
-        container.appendChild(botao);
-    });
+function atualizarSeletorCabelo() {
+    const indice = Math.max(0, OPCOES_AVATAR.cabelos
+        .findIndex(opcao => opcao.id === rascunho.avatar.cabelo));
+    document.getElementById("nome-cabelo").textContent = OPCOES_AVATAR.cabelos[indice].nome;
+    document.getElementById("contador-cabelo").textContent = `${indice + 1} de ${OPCOES_AVATAR.cabelos.length}`;
 }
 
 function renderizarOpcoesCor(idContainer, opcoes, campoAvatar) {
@@ -370,6 +361,34 @@ function renderizarOpcoesCor(idContainer, opcoes, campoAvatar) {
         botao.addEventListener("click", () => {
             rascunho.avatar[campoAvatar] = opcao.id;
             renderizarOpcoesCor(idContainer, opcoes, campoAvatar);
+            atualizarPreview();
+        });
+        container.appendChild(botao);
+    });
+}
+
+function renderizarOpcoesRoupa() {
+    const container = document.getElementById("opcoes-roupa");
+    container.replaceChildren();
+
+    OPCOES_AVATAR.roupas.forEach(opcao => {
+        const botao = document.createElement("button");
+        botao.type = "button";
+        botao.className = "opcao-roupa";
+        botao.classList.toggle("selecionada", rascunho.avatar.roupa === opcao.id);
+        botao.setAttribute("aria-pressed", String(rascunho.avatar.roupa === opcao.id));
+
+        const amostra = document.createElement("span");
+        amostra.className = `amostra-roupa ${opcao.id.startsWith("uniforme-") ? opcao.id : ""}`.trim();
+        amostra.style.setProperty("--cor-opcao", opcao.cor);
+        amostra.style.setProperty("--cor-detalhe", opcao.detalhe);
+        const nome = document.createElement("span");
+        nome.textContent = opcao.nome;
+        botao.append(amostra, nome);
+
+        botao.addEventListener("click", () => {
+            rascunho.avatar.roupa = opcao.id;
+            renderizarOpcoesRoupa();
             atualizarPreview();
         });
         container.appendChild(botao);
@@ -501,7 +520,7 @@ function comecarUso() {
 
     document.getElementById("mensagem-uso").textContent =
         `${perfilSelecionado.nome} está usando a cafeteira.`;
-    document.getElementById("horario-uso").textContent = `🕐 Começou às ${horario}`;
+    document.getElementById("horario-uso").textContent = `Início: ${horario}`;
     mostrarTela("tela-em-uso");
 }
 
@@ -535,6 +554,8 @@ function configurarEventos() {
     document.getElementById("botao-voltar-perfis").addEventListener("click", voltarAoInicio);
     document.getElementById("botao-proxima-etapa").addEventListener("click", proximaEtapa);
     document.getElementById("botao-etapa-anterior").addEventListener("click", etapaAnterior);
+    document.getElementById("botao-cabelo-anterior").addEventListener("click", () => alterarCabelo(-1));
+    document.getElementById("botao-cabelo-proximo").addEventListener("click", () => alterarCabelo(1));
     document.getElementById("formulario-personagem").addEventListener("submit", salvarNovoPersonagem);
     document.getElementById("botao-comecar-uso").addEventListener("click", comecarUso);
     document.getElementById("botao-finalizar-uso").addEventListener("click", finalizarUso);
