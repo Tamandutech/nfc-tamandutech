@@ -7,7 +7,7 @@
     <meta name="theme-color" content="#315f4a">
     <meta name="color-scheme" content="light only">
     <title>Cafeteira Tamandutech</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css?v=20260818-3">
 </head>
 
 <body>
@@ -26,9 +26,9 @@
             </div>
         </header>
 
-        <div id="status-sincronizacao" class="status-sincronizacao local" role="status" aria-live="polite">
+        <div id="status-sincronizacao" class="status-sincronizacao conectando" role="status" aria-live="polite" hidden>
             <span class="status-sincronizacao-ponto" aria-hidden="true"></span>
-            <span id="texto-sincronizacao">Personagens salvos neste dispositivo</span>
+            <span id="texto-sincronizacao">Conectando à sincronização…</span>
         </div>
 
         <aside id="aviso-cafeteira" class="aviso-cafeteira escondido" aria-live="polite">
@@ -95,7 +95,7 @@
                 </div>
 
                 <div class="etapa-criador escondido" data-etapa="2">
-                    <h3>De quais equipes você participa?</h3>
+                    <h3>De quais categorias você participa?</h3>
                     <label class="opcao-administrativo">
                         <input id="participa-administrativo" type="checkbox">
                         <span>
@@ -210,8 +210,8 @@
         </section>
     </main>
 
-    <script src="firebase-config.js"></script>
-    <script src="script.js"></script>
+    <script src="firebase-config.js?v=20260818-3"></script>
+    <script src="script.js?v=20260818-3"></script>
 </body>
 
 </html>

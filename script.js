@@ -101,6 +101,7 @@ function salvarPerfis() {
 function atualizarStatusSincronizacao(tipo, mensagem) {
     const status = document.getElementById("status-sincronizacao");
     status.className = `status-sincronizacao ${tipo}`;
+    status.hidden = tipo !== "erro";
     document.getElementById("texto-sincronizacao").textContent = mensagem;
 }
 
