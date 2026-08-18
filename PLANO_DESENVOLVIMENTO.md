@@ -5,6 +5,7 @@ Este arquivo registra a ordem combinada para o projeto. Uma etapa só começa de
 ## Etapa atual — Frontend básico
 
 - [x] Fluxo de uso: perfil → vou usar → em uso → já limpei
+- [x] Página inicial organizada em categoria → personagens
 - [x] Criador de personagem dividido em etapas
 - [x] Nome ou apelido do usuário
 - [x] Regra de participação: Administrativo + no máximo uma categoria técnica
@@ -12,7 +13,8 @@ Este arquivo registra a ordem combinada para o projeto. Uma etapa só começa de
 - [x] Salvamento temporário dos perfis no `localStorage`
 - [ ] Validar a experiência em celulares Android e iPhone
 - [ ] Confirmar nomes e categorias reais dos integrantes
-- [ ] Refinar a arte provisória sem alterar a lógica validada
+- [x] Evoluir o avatar provisório para um sprite original de corpo inteiro
+- [ ] Produzir a arte final e ampliar cabelos, roupas e acessórios
 
 ## Etapa 2 — Firebase Realtime Database
 
