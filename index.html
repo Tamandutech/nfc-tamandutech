@@ -7,7 +7,7 @@
     <meta name="theme-color" content="#315f4a">
     <meta name="color-scheme" content="light only">
     <title>Cafeteira Tamandutech</title>
-    <link rel="stylesheet" href="style.css?v=20260818-3">
+    <link rel="stylesheet" href="style.css?v=20260818-4">
 </head>
 
 <body>
@@ -30,6 +30,13 @@
             <span class="status-sincronizacao-ponto" aria-hidden="true"></span>
             <span id="texto-sincronizacao">Conectando à sincronização…</span>
         </div>
+
+        <nav class="barra-acoes-globais" aria-label="Ações da cafeteira">
+            <button id="botao-abrir-historico" class="botao-historico" type="button">
+                <span aria-hidden="true">▤</span>
+                Histórico de uso
+            </button>
+        </nav>
 
         <aside id="aviso-cafeteira" class="aviso-cafeteira escondido" aria-live="polite">
             <span class="aviso-cafeteira-luz" aria-hidden="true"></span>
@@ -67,13 +74,14 @@
             <button id="botao-criar-perfil" class="botao botao-destaque" type="button">
                 ＋ Criar meu personagem
             </button>
+            <p id="aviso-perfil-existente" class="aviso-perfil-existente escondido" role="status"></p>
         </section>
 
         <section id="tela-criador" class="tela escondido">
             <button id="botao-sair-criador" class="botao-voltar" type="button">← Voltar aos perfis</button>
             <div class="titulo-tela">
-                <p class="etiqueta">Novo personagem</p>
-                <h2>Crie seu perfil</h2>
+                <p id="etiqueta-criador" class="etiqueta">Novo personagem</p>
+                <h2 id="titulo-criador">Crie seu perfil</h2>
             </div>
 
             <div class="progresso" aria-label="Progresso da criação do personagem">
@@ -162,6 +170,11 @@
             <div id="avatar-perfil" class="preview-avatar"></div>
             <h2 id="nome-perfil"></h2>
             <div id="categorias-perfil" class="lista-etiquetas"></div>
+            <div id="acoes-perfil-dono" class="acoes-perfil-dono escondido">
+                <button id="botao-editar-perfil" class="botao botao-secundario" type="button">✎ Editar meu personagem</button>
+                <button id="botao-excluir-perfil" class="botao botao-perigo" type="button">Excluir</button>
+                <small>Somente quem criou este personagem neste navegador pode alterá-lo.</small>
+            </div>
             <button id="botao-comecar-uso" class="botao botao-destaque botao-com-icone" type="button">
                 <span class="cafe-pixel cafe-pixel-botao" aria-hidden="true">
                     <span class="vapor-pixel vapor-pixel-um"></span>
@@ -210,8 +223,38 @@
         </section>
     </main>
 
-    <script src="firebase-config.js?v=20260818-3"></script>
-    <script src="script.js?v=20260818-3"></script>
+    <section id="modal-historico" class="modal-sobreposicao escondido" role="dialog" aria-modal="true"
+        aria-labelledby="titulo-historico">
+        <div class="modal-cartao modal-historico-cartao">
+            <div class="modal-cabecalho">
+                <div>
+                    <p class="etiqueta">Cafeteira Tamandutech</p>
+                    <h2 id="titulo-historico">Histórico de uso</h2>
+                </div>
+                <button id="botao-fechar-historico" class="botao-fechar-modal" type="button"
+                    aria-label="Fechar histórico">×</button>
+            </div>
+            <p class="modal-introducao">Usos finalizados com a limpeza confirmada, do mais recente para o mais antigo.</p>
+            <ol id="lista-historico" class="lista-historico" aria-live="polite"></ol>
+            <p id="historico-vazio" class="estado-vazio">Ainda não há usos finalizados.</p>
+        </div>
+    </section>
+
+    <section id="modal-exclusao" class="modal-sobreposicao escondido" role="dialog" aria-modal="true"
+        aria-labelledby="titulo-exclusao">
+        <div class="modal-cartao modal-confirmacao">
+            <p class="etiqueta">Atenção</p>
+            <h2 id="titulo-exclusao">Excluir seu personagem?</h2>
+            <p id="texto-exclusao">Esta ação não pode ser desfeita. O histórico de uso será preservado.</p>
+            <div class="acoes-modal">
+                <button id="botao-cancelar-exclusao" class="botao botao-secundario" type="button">Cancelar</button>
+                <button id="botao-confirmar-exclusao" class="botao botao-perigo" type="button">Sim, excluir</button>
+            </div>
+        </div>
+    </section>
+
+    <script src="firebase-config.js?v=20260818-4"></script>
+    <script src="script.js?v=20260818-4"></script>
 </body>
 
 </html>

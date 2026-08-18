@@ -8,7 +8,7 @@ O frontend está conectado ao projeto `cafeteira-tamandutech` no Firebase Realti
 2. Realtime Database em `us-central1`, no plano Spark gratuito.
 3. Authentication com o provedor **Anônimo** habilitado.
 4. Domínio `tamandutech.github.io` autorizado no Firebase Authentication.
-5. Regras de `database.rules.json` publicadas.
+5. Regras básicas de `database.rules.json` publicadas; a revisão com edição, exclusão e histórico precisa ser republicada após o merge.
 
 ## Configuração do frontend
 
@@ -31,6 +31,7 @@ perfis/
     avatar
     criadorUid
     criadoEm
+    atualizadoEm
 
 estadoCafeteira/
   perfilId
@@ -38,6 +39,20 @@ estadoCafeteira/
   categorias
   inicioEm
   usuarioUid
+
+historico/
+  registro-id/
+    perfilId
+    nome
+    categorias
+    inicioEm
+    fimEm
+    duracaoMs
+    limpezaConfirmada
+    limpoPor
+    usuarioUid
 ```
 
 `estadoCafeteira` é reservado com uma transação. Se já houver um uso ativo, uma segunda reserva é rejeitada pelo cliente e pelas regras do banco.
+
+Cada personagem carrega o `criadorUid` da autenticação anônima. As regras permitem alteração e exclusão somente quando esse UID é o mesmo que criou o registro. Na beta, isso identifica o navegador: ao limpar os dados do site ou trocar de aparelho, a pessoa recebe outro UID. Identidade permanente exigirá login por Google ou e-mail em uma etapa futura.
