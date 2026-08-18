@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#2f6b4f">
+    <meta name="theme-color" content="#315f4a">
     <title>Cafeteira Tamandutech</title>
     <link rel="stylesheet" href="style.css">
 </head>
@@ -12,7 +12,13 @@
 <body>
     <main class="painel">
         <header class="cabecalho-principal">
-            <span class="icone-cafe" aria-hidden="true">☕</span>
+            <span class="cafe-pixel cafe-pixel-cabecalho" aria-hidden="true">
+                <span class="vapor-pixel vapor-pixel-um"></span>
+                <span class="vapor-pixel vapor-pixel-dois"></span>
+                <span class="xicara-pixel"></span>
+                <span class="alca-pixel"></span>
+                <span class="pires-pixel"></span>
+            </span>
             <div>
                 <p class="marca">Tamandutech</p>
                 <h1>Cafeteira</h1>
@@ -104,7 +110,16 @@
                             </fieldset>
                             <fieldset>
                                 <legend>Cabelo</legend>
-                                <div id="opcoes-cabelo" class="grade-opcoes compacta"></div>
+                                <div class="seletor-cabelo">
+                                    <button id="botao-cabelo-anterior" class="seta-seletor" type="button"
+                                        aria-label="Ver cabelo anterior">←</button>
+                                    <div class="cabelo-selecionado" aria-live="polite">
+                                        <strong id="nome-cabelo"></strong>
+                                        <small id="contador-cabelo"></small>
+                                    </div>
+                                    <button id="botao-cabelo-proximo" class="seta-seletor" type="button"
+                                        aria-label="Ver próximo cabelo">→</button>
+                                </div>
                             </fieldset>
                             <fieldset>
                                 <legend>Cor do cabelo</legend>
@@ -112,7 +127,7 @@
                             </fieldset>
                             <fieldset>
                                 <legend>Roupa</legend>
-                                <div id="opcoes-roupa" class="opcoes-cor"></div>
+                                <div id="opcoes-roupa" class="opcoes-roupa"></div>
                             </fieldset>
                         </div>
                     </div>
@@ -133,11 +148,28 @@
             <div id="avatar-perfil" class="preview-avatar"></div>
             <h2 id="nome-perfil"></h2>
             <div id="categorias-perfil" class="lista-etiquetas"></div>
-            <button id="botao-comecar-uso" class="botao botao-destaque" type="button">☕ Vou usar a cafeteira</button>
+            <button id="botao-comecar-uso" class="botao botao-destaque botao-com-icone" type="button">
+                <span class="cafe-pixel cafe-pixel-botao" aria-hidden="true">
+                    <span class="vapor-pixel vapor-pixel-um"></span>
+                    <span class="vapor-pixel vapor-pixel-dois"></span>
+                    <span class="xicara-pixel"></span>
+                    <span class="alca-pixel"></span>
+                    <span class="pires-pixel"></span>
+                </span>
+                Vou usar a cafeteira
+            </button>
         </section>
 
         <section id="tela-em-uso" class="tela escondido">
-            <div class="cafe-grande" aria-hidden="true">☕</div>
+            <div class="cena-cafe-pixel" aria-hidden="true">
+                <span class="cafe-pixel cafe-pixel-grande">
+                    <span class="vapor-pixel vapor-pixel-um"></span>
+                    <span class="vapor-pixel vapor-pixel-dois"></span>
+                    <span class="xicara-pixel"></span>
+                    <span class="alca-pixel"></span>
+                    <span class="pires-pixel"></span>
+                </span>
+            </div>
             <p class="etiqueta">Status atual</p>
             <h2>Cafeteira em uso!</h2>
             <p id="mensagem-uso" class="mensagem-status"></p>
@@ -146,7 +178,17 @@
         </section>
 
         <section id="tela-conclusao" class="tela escondido">
-            <div class="celebracao" aria-hidden="true">✨☕✨</div>
+            <div class="celebracao-pixel" aria-hidden="true">
+                <span class="estrela-pixel estrela-pixel-esquerda"></span>
+                <span class="cafe-pixel cafe-pixel-grande">
+                    <span class="vapor-pixel vapor-pixel-um"></span>
+                    <span class="vapor-pixel vapor-pixel-dois"></span>
+                    <span class="xicara-pixel"></span>
+                    <span class="alca-pixel"></span>
+                    <span class="pires-pixel"></span>
+                </span>
+                <span class="estrela-pixel estrela-pixel-direita"></span>
+            </div>
             <p class="etiqueta">Tudo pronto</p>
             <h2 id="titulo-conclusao"></h2>
             <p>Uso finalizado e limpeza confirmada.</p>

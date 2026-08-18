@@ -11,10 +11,15 @@ Este arquivo registra a ordem combinada para o projeto. Uma etapa só começa de
 - [x] Regra de participação: Administrativo + no máximo uma categoria técnica
 - [x] Personalização inicial: pele, cabelo, cor do cabelo e roupa
 - [x] Salvamento temporário dos perfis no `localStorage`
+- [x] Corrigir a separação entre avatar, nome e categoria nos cartões mobile
+- [x] Ampliar para 12 cabelos com seletor anterior/próximo
+- [x] Adicionar versões verde e branca do uniforme Tamandutech
+- [x] Substituir o emoji de café por ícone próprio em pixel art
+- [x] Preparar a beta sem personagens predefinidos e com armazenamento isolado
 - [ ] Validar a experiência em celulares Android e iPhone
 - [ ] Confirmar nomes e categorias reais dos integrantes
 - [x] Evoluir o avatar provisório para um sprite original de corpo inteiro
-- [ ] Produzir a arte final e ampliar cabelos, roupas e acessórios
+- [ ] Refinar a arte final e ampliar roupas e acessórios após o teste beta
 
 ## Etapa 2 — Firebase Realtime Database
 
