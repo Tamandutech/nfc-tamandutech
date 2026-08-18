@@ -23,8 +23,12 @@ Este arquivo registra a ordem combinada para o projeto. Uma etapa só começa de
 - [x] Adicionar cabelo branco, mantendo a opção ruiva
 - [x] Versionar CSS e JavaScript para impedir mistura de arquivos antigos em cache
 - [x] Ocultar o aviso de sincronização quando a conexão estiver normal
-- [x] Transformar o fundo externo do desktop em uma sala com sofá e troféus
+- [x] Substituir o fundo externo do desktop por pixel art original da UFABC Santo André
 - [x] Trocar o texto de participação de "equipes" para "categorias"
+- [x] Separar a cor fixa dos sapatos da cor escolhida para o cabelo
+- [x] Suavizar o formato das tranças e do rabo de cavalo sem blocos externos
+- [x] Permitir editar e excluir apenas o personagem criado pelo mesmo usuário anônimo
+- [x] Avisar quando o navegador já possui um personagem e impedir nomes repetidos
 - [ ] Validar a experiência em celulares Android e iPhone
 - [ ] Confirmar nomes e categorias reais dos integrantes
 - [x] Evoluir o avatar provisório para um sprite original de corpo inteiro
@@ -41,7 +45,9 @@ Este arquivo registra a ordem combinada para o projeto. Uma etapa só começa de
 - [x] Sincronizar os perfis em tempo real
 - [x] Reservar a cafeteira com transação para impedir dois usos simultâneos
 - [x] Sincronizar o estado da cafeteira em tempo real
-- [ ] Registrar início, fim, duração, categoria e confirmação de limpeza
+- [x] Registrar início, fim, duração, categoria e confirmação de limpeza
+- [x] Exibir o histórico compartilhado em uma janela dentro da interface
+- [ ] Publicar no Firebase as regras de edição, exclusão e histórico desta revisão
 - [ ] Validar o fluxo simultaneamente em dois celulares
 
 ## Etapa 3 — NFC e QR Code
