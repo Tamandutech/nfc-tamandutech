@@ -20,12 +20,30 @@
         </header>
 
         <section id="tela-inicio" class="tela">
-            <div class="titulo-tela">
-                <p class="etiqueta">Bem-vindo!</p>
-                <h2>Quem vai usar a cafeteira?</h2>
-                <p>Escolha seu personagem ou crie um novo perfil.</p>
+            <div id="visao-categorias">
+                <div class="titulo-tela">
+                    <p class="etiqueta">Bem-vindo!</p>
+                    <h2>Escolha sua categoria</h2>
+                    <p>Depois, selecione o personagem de quem vai usar a cafeteira.</p>
+                </div>
+                <div id="lista-categorias" class="grade-categorias"></div>
             </div>
-            <div id="lista-perfis" class="grade-perfis" aria-live="polite"></div>
+
+            <div id="visao-perfis-categoria" class="escondido">
+                <button id="botao-voltar-categorias" class="botao-voltar" type="button">← Todas as categorias</button>
+                <div class="cabecalho-categoria">
+                    <span id="icone-categoria" class="icone-categoria" aria-hidden="true"></span>
+                    <div>
+                        <p class="etiqueta">Personagens</p>
+                        <h2 id="titulo-categoria"></h2>
+                    </div>
+                </div>
+                <div id="lista-perfis" class="grade-perfis" aria-live="polite"></div>
+                <p id="mensagem-sem-perfis" class="estado-vazio escondido">
+                    Ainda não há personagens nesta categoria.
+                </p>
+            </div>
+
             <button id="botao-criar-perfil" class="botao botao-destaque" type="button">
                 ＋ Criar meu personagem
             </button>
@@ -74,24 +92,30 @@
 
                 <div class="etapa-criador escondido" data-etapa="3">
                     <h3>Monte seu personagem</h3>
-                    <div id="preview-avatar" class="preview-avatar"></div>
-
-                    <fieldset>
-                        <legend>Tom de pele</legend>
-                        <div id="opcoes-pele" class="opcoes-cor"></div>
-                    </fieldset>
-                    <fieldset>
-                        <legend>Cabelo</legend>
-                        <div id="opcoes-cabelo" class="grade-opcoes compacta"></div>
-                    </fieldset>
-                    <fieldset>
-                        <legend>Cor do cabelo</legend>
-                        <div id="opcoes-cor-cabelo" class="opcoes-cor"></div>
-                    </fieldset>
-                    <fieldset>
-                        <legend>Roupa</legend>
-                        <div id="opcoes-roupa" class="opcoes-cor"></div>
-                    </fieldset>
+                    <div class="editor-avatar">
+                        <div class="palco-avatar">
+                            <div id="preview-avatar" class="preview-avatar"></div>
+                            <p>Prévia do personagem</p>
+                        </div>
+                        <div class="controles-avatar">
+                            <fieldset>
+                                <legend>Tom de pele</legend>
+                                <div id="opcoes-pele" class="opcoes-cor"></div>
+                            </fieldset>
+                            <fieldset>
+                                <legend>Cabelo</legend>
+                                <div id="opcoes-cabelo" class="grade-opcoes compacta"></div>
+                            </fieldset>
+                            <fieldset>
+                                <legend>Cor do cabelo</legend>
+                                <div id="opcoes-cor-cabelo" class="opcoes-cor"></div>
+                            </fieldset>
+                            <fieldset>
+                                <legend>Roupa</legend>
+                                <div id="opcoes-roupa" class="opcoes-cor"></div>
+                            </fieldset>
+                        </div>
+                    </div>
                     <div id="resumo-personagem" class="resumo-personagem"></div>
                 </div>
 
