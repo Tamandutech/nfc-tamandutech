@@ -21,6 +21,10 @@ Este arquivo registra a ordem combinada para o projeto. Uma etapa só começa de
 - [x] Trocar o cenário por parede clara, sofá preto e troféus
 - [x] Forçar o esquema de cores claro nos navegadores
 - [x] Adicionar cabelo branco, mantendo a opção ruiva
+- [x] Versionar CSS e JavaScript para impedir mistura de arquivos antigos em cache
+- [x] Ocultar o aviso de sincronização quando a conexão estiver normal
+- [x] Transformar o fundo externo do desktop em uma sala com sofá e troféus
+- [x] Trocar o texto de participação de "equipes" para "categorias"
 - [ ] Validar a experiência em celulares Android e iPhone
 - [ ] Confirmar nomes e categorias reais dos integrantes
 - [x] Evoluir o avatar provisório para um sprite original de corpo inteiro
